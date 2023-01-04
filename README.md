@@ -35,8 +35,8 @@ deconz_sensor_sinceUpdate{manufacturer="LUMI",model="lumi.weather",name="Aqara W
 deconz_sensor_temperature{manufacturer="LUMI",model="lumi.weather",name="Aqara WSDCGQ11LM 0",type="ZHATemperature",uid="00:11:22:33:44:55:66:77-01-0402"} 21.08
 ...
 ```
-#How to build and run docker
+# How to build and run docker
 docker build -t deconz-exporter .
 docker run -dp 7080:8080 -e DECONZ_TOKEN="14A874xxx" -e PORT=2112 -e DECONZ_HOST="192.168.178.81" -e DECONZ_PORT=8090 deconz-exporter
-#How to integrate in prometheus
+# How to integrate in prometheus
 in prometheus.yml add Target: targets: ['localhost:7080']
