@@ -203,9 +203,6 @@ func recordMetrics() {
 						case "ZHAPressure":
 							pressureMetric.With(labels).Set(float64(sensor.State.Pressure))
 							lastUpdMetric.With(slimLabels).Set(float64(timeDiff(sensor.State.Lastupdated).Seconds()))
-						case "ZHAAirQuality":
-							qualityMetric.With(labels).Set(float64(sensor.State.Quality))
-							lastUpdMetric.With(slimLabels).Set(float64(timeDiff(sensor.State.Lastupdated).Seconds()))
 						case "Daylight":
 							lastUpdMetric.With(slimLabels).Set(float64(timeDiff(sensor.State.Lastupdated).Seconds()))
 						case "ZHAOpenClose":
@@ -220,6 +217,9 @@ func recordMetrics() {
 						case "ZHAConsumption":
 							powerMetrics.With(labels).Set(float64(sensor.State.Power))
 							lastUpdMetric.With(slimLabels).Set(float64(timeDiff(sensor.State.Lastupdated).Seconds()))
+						case "ZHAAirQuality":
+							qualityMetric.With(labels).Set(float64(sensor.State.Quality))
+
 						}
 
 						collectBatteryData(sensor, slimLabels)
