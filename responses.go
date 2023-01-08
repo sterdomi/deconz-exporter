@@ -21,7 +21,7 @@ type Sensor struct {
 		Temperature int    `json:"temperature"`
 		Humidity    int    `json:"humidity"`
 		Pressure    int    `json:"pressure"`
-		Quality     int    `json:"quality"`
+		Quality     int    `json:"airqualityppb"`
 		Open        bool   `json:open`
 		On          bool   `json:on`
 		Valve       int    `json:valve`

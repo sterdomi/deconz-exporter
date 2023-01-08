@@ -159,7 +159,7 @@ var (
 	qualityMetric = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: "deconz",
 		Subsystem: "sensor",
-		Name:      "airQuality",
+		Name:      "airqualityppb",
 		Help:      "The AirQuality TVOC",
 	}, labelsArbi)
 	errorCtr = promauto.NewCounter(prometheus.CounterOpts{
@@ -219,7 +219,7 @@ func recordMetrics() {
 							lastUpdMetric.With(slimLabels).Set(float64(timeDiff(sensor.State.Lastupdated).Seconds()))
 						case "ZHAAirQuality":
 							qualityMetric.With(labels).Set(float64(sensor.State.Quality))
-
+							lastUpdMetric.With(slimLabels).Set(float64(timeDiff(sensor.State.Lastupdated).Seconds()))
 						}
 
 						collectBatteryData(sensor, slimLabels)
