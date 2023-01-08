@@ -161,7 +161,7 @@ var (
 		Subsystem: "sensor",
 		Name:      "airqualityppb",
 		Help:      "The AirQuality TVOC",
-	}, labelsArbi)
+	}, labels)
 	errorCtr = promauto.NewCounter(prometheus.CounterOpts{
 		Namespace: "deconz",
 		Subsystem: "sensor",
