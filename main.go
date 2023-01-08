@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,9 +14,6 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func init() {
@@ -156,6 +156,12 @@ var (
 		Name:      "sinceUpdate",
 		Help:      "The time since the last update that was received from this sensor",
 	}, labelsArbi)
+	qualityMetric = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Namespace: "deconz",
+		Subsystem: "sensor",
+		Name:      "airQuality",
+		Help:      "The AirQuality TVOC",
+	}, labelsArbi)
 	errorCtr = promauto.NewCounter(prometheus.CounterOpts{
 		Namespace: "deconz",
 		Subsystem: "sensor",
@@ -196,6 +202,9 @@ func recordMetrics() {
 							lastUpdMetric.With(slimLabels).Set(float64(timeDiff(sensor.State.Lastupdated).Seconds()))
 						case "ZHAPressure":
 							pressureMetric.With(labels).Set(float64(sensor.State.Pressure))
+							lastUpdMetric.With(slimLabels).Set(float64(timeDiff(sensor.State.Lastupdated).Seconds()))
+						case "ZHAAirQuality":
+							qualityMetric.With(labels).Set(float64(sensor.State.Quality))
 							lastUpdMetric.With(slimLabels).Set(float64(timeDiff(sensor.State.Lastupdated).Seconds()))
 						case "Daylight":
 							lastUpdMetric.With(slimLabels).Set(float64(timeDiff(sensor.State.Lastupdated).Seconds()))
@@ -239,17 +248,18 @@ func timeDiff(lastUpdate string) time.Duration {
 }
 
 func isSupportedSensor(dType string) bool {
-    switch dType {
-    case
-        "ZHATemperature",
-        "ZHAPressure",
+	switch dType {
+	case
+		"ZHATemperature",
+		"ZHAPressure",
 		"ZHAHumidity",
+		"ZHAAirQuality",
 		"ZHAThermostat",
 		"ZHAConsumption",
-        "ZHAOpenClose":
-        return true
-    }
-    return false
+		"ZHAOpenClose":
+		return true
+	}
+	return false
 }
 
 func ConBool(input bool) float64 {
